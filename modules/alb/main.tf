@@ -1,4 +1,4 @@
-resource "aws_alb" "main" {
+resource "aws_lb" "main" {
   name               = "alb-${var.env}"
   internal           = false
   load_balancer_type = "application"
@@ -11,7 +11,7 @@ resource "aws_alb" "main" {
   }
 }
 
-resource "aws_alb_target_group" "main" {
+resource "aws_lb_target_group" "main" {
   name     = "tg-${var.env}"
   port     = 80
   protocol = "HTTP"
@@ -33,12 +33,12 @@ resource "aws_alb_target_group" "main" {
 }
 
 resource "aws_lb_listener" "main" {
-  load_balancer_arn = aws_alb.main.arn
+  load_balancer_arn = aws_lb.main.arn
   port              = 80
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.main.arn
+    target_group_arn = aws_lb_target_group.main.arn
   }
 }
