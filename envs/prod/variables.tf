@@ -1,7 +1,7 @@
 variable "env" {
   description = "The environment for the VPC (e.g., dev, prod)"
   type        = string
-  
+
 }
 
 variable "aws_region" {
