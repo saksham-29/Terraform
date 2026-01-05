@@ -37,6 +37,16 @@ resource "aws_instance" "app" {
     subnet_id     = var.private_subnet_ids[count.index]
     vpc_security_group_ids = [var.app_sg_id]
     iam_instance_profile = aws_iam_instance_profile.main.name
+    associate_public_ip_address = false
+
+    user_data = <<-EOF
+              #!/bin/bash
+              yum update -y
+              yum install -y httpd
+              systemctl start httpd
+              systemctl enable httpd
+              echo "OK - ${var.env} instance $(hostname)" > /var/www/html/index.html
+              EOF
 
     tags = {
         Name        = "${var.env}-app-instance-${count.index + 1}"

@@ -43,3 +43,20 @@ variable "instance_type" {
   description = "The type of EC2 instance to launch"
   type        = string
 }
+
+variable "db_name" {
+  type = string
+}
+
+variable "db_username" {
+  type = string
+}
+
+variable "db_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "db_instance_class" {
+  type = string
+}
