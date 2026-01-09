@@ -34,6 +34,9 @@ module "compute" {
   private_subnet_ids = module.vpc.private_subnet_ids
   app_sg_id          = module.security.app_sg_id
   target_group_arn   = module.alb.target_group_arn
+  asg_max_size       = var.asg_max_size
+  asg_min_size       = var.asg_min_size
+  asg_desired_capacity = var.asg_desired_capacity
 }
 
 module "rds" {

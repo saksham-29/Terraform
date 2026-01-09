@@ -60,3 +60,18 @@ variable "db_password" {
 variable "db_instance_class" {
   type = string
 }
+
+variable "asg_min_size" {
+  description = "Minimum size of the Auto Scaling Group"
+  type        = number
+}
+
+variable "asg_max_size" {
+  description = "Maximum size of the Auto Scaling Group"
+  type        = number
+}
+
+variable "asg_desired_capacity" {
+  description = "Desired capacity of the Auto Scaling Group"
+  type        = number
+}

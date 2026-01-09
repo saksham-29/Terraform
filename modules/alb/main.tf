@@ -18,12 +18,12 @@ resource "aws_lb_target_group" "main" {
   vpc_id   = var.vpc_id
 
   health_check {
+    protocol            = "HTTP"
     path                = "/"
-    interval            = 30
     matcher             = "200-399"
+    interval            = 30
     healthy_threshold   = 2
     unhealthy_threshold = 2
-    protocol = "HTTP"
   }
 
   tags = {
@@ -31,6 +31,8 @@ resource "aws_lb_target_group" "main" {
     Name        = "tg-${var.env}"
   }
 }
+
+
 
 resource "aws_lb_listener" "main" {
   load_balancer_arn = aws_lb.main.arn

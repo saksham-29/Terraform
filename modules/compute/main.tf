@@ -29,34 +29,57 @@ resource "aws_iam_instance_profile" "main" {
   role = aws_iam_role.ec2_role.name
 }
 
-resource "aws_instance" "app" {
-    count = length(var.private_subnet_ids)
+resource "aws_launch_template" "app" {
+  name_prefix   = "${var.env}-app-"
+  image_id      = var.ami_id
+  instance_type = var.instance_type
 
-    ami           = var.ami_id
-    instance_type = var.instance_type
-    subnet_id     = var.private_subnet_ids[count.index]
-    vpc_security_group_ids = [var.app_sg_id]
-    iam_instance_profile = aws_iam_instance_profile.main.name
-    associate_public_ip_address = false
+  iam_instance_profile {
+    name = aws_iam_instance_profile.main.name
+  }
 
-    user_data = <<-EOF
-              #!/bin/bash
-              yum update -y
-              yum install -y httpd
-              systemctl start httpd
-              systemctl enable httpd
-              echo "OK - ${var.env} instance $(hostname)" > /var/www/html/index.html
-              EOF
+  vpc_security_group_ids = [var.app_sg_id]
 
+  user_data = base64encode(<<-EOF
+  #!/bin/bash
+  yum update -y
+  yum install -y httpd
+  systemctl enable httpd
+  systemctl start httpd
+  echo "OK - ${var.env} ASG instance $(hostname)" > /var/www/html/index.html
+  EOF
+  )
+
+  tag_specifications {
+    resource_type = "instance"
     tags = {
-        Name        = "${var.env}-app-instance-${count.index + 1}"
-        Environment = var.env
+      Name        = "${var.env}-asg-instance"
+      Environment = var.env
     }
+  }
 }
 
-resource "aws_lb_target_group_attachment" "app" {
-    count            = length(aws_instance.app)
-    target_group_arn = var.target_group_arn
-    target_id        = aws_instance.app[count.index].id
-    port             = 80
+
+resource "aws_autoscaling_group" "app" {
+  name                      = "${var.env}-app-asg"
+  min_size                  = var.asg_min_size
+  max_size                  = var.asg_max_size
+  desired_capacity          = var.asg_desired_capacity
+
+  vpc_zone_identifier       = var.private_subnet_ids
+  health_check_type         = "ELB"
+  health_check_grace_period = 120
+
+  target_group_arns = [var.target_group_arn]
+
+  launch_template {
+    id      = aws_launch_template.app.id
+    version = "$Latest"
+  }
+
+  tag {
+    key                 = "Environment"
+    value               = var.env
+    propagate_at_launch = true
+  }
 }
