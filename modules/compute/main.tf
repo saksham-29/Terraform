@@ -83,3 +83,28 @@ resource "aws_autoscaling_group" "app" {
     propagate_at_launch = true
   }
 }
+
+resource "aws_autoscaling_policy" "scale_out" {
+  name                   = "${var.env}-scale-out-policy"
+  autoscaling_group_name = aws_autoscaling_group.app.name
+  policy_type = "TargetTrackingScaling"
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 60
+  }
+}
+
+resource "aws_autoscaling_policy" "scale_in" {
+  name                   = "${var.env}-scale-in-policy"
+  autoscaling_group_name = aws_autoscaling_group.app.name
+  policy_type = "TargetTrackingScaling"
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 30
+  }
+  
+}
