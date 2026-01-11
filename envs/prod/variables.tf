@@ -76,3 +76,8 @@ variable "asg_desired_capacity" {
   type        = number
 }
 
+variable "email" {
+  description = "Email address for monitoring notifications"
+  type        = string
+}
+
