@@ -15,7 +15,7 @@ resource "aws_iam_role" "ec2_role" {
   })
   tags = {
     Environment = var.env
-    Name = "${var.env}-ec2-role"
+    Name        = "${var.env}-ec2-role"
   }
 }
 
@@ -61,10 +61,10 @@ resource "aws_launch_template" "app" {
 
 
 resource "aws_autoscaling_group" "app" {
-  name                      = "${var.env}-app-asg"
-  min_size                  = var.asg_min_size
-  max_size                  = var.asg_max_size
-  desired_capacity          = var.asg_desired_capacity
+  name             = "${var.env}-app-asg"
+  min_size         = var.asg_min_size
+  max_size         = var.asg_max_size
+  desired_capacity = var.asg_desired_capacity
 
   vpc_zone_identifier       = var.private_subnet_ids
   health_check_type         = "ELB"
@@ -87,7 +87,7 @@ resource "aws_autoscaling_group" "app" {
 resource "aws_autoscaling_policy" "scale_out" {
   name                   = "${var.env}-scale-out-policy"
   autoscaling_group_name = aws_autoscaling_group.app.name
-  policy_type = "TargetTrackingScaling"
+  policy_type            = "TargetTrackingScaling"
   target_tracking_configuration {
     predefined_metric_specification {
       predefined_metric_type = "ASGAverageCPUUtilization"
@@ -99,12 +99,12 @@ resource "aws_autoscaling_policy" "scale_out" {
 resource "aws_autoscaling_policy" "scale_in" {
   name                   = "${var.env}-scale-in-policy"
   autoscaling_group_name = aws_autoscaling_group.app.name
-  policy_type = "TargetTrackingScaling"
+  policy_type            = "TargetTrackingScaling"
   target_tracking_configuration {
     predefined_metric_specification {
       predefined_metric_type = "ASGAverageCPUUtilization"
     }
     target_value = 30
   }
-  
+
 }
