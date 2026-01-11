@@ -76,14 +76,8 @@ variable "asg_desired_capacity" {
   type        = number
 }
 
-variable "domain_name" {
-  description = "The domain name for the ACM certificate"
+variable "email" {
+  description = "Email address for monitoring notifications"
   type        = string
-
 }
 
-variable "hosted_zone_name" {
-  type        = string
-  description = "Route53 hosted zone name (e.g. example.com)"
-
-}
