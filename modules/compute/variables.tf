@@ -28,13 +28,13 @@ variable "target_group_arn" {
   type        = string
 }
 
-variable "asg_max_size" {
-  description = "Maximum size of the Auto Scaling Group"
+variable "asg_min_size" {
+  description = "Minimum size of the Auto Scaling Group"
   type        = number
 }
 
-variable "asg_min_size" {
-  description = "Minimum size of the Auto Scaling Group"
+variable "asg_max_size" {
+  description = "Maximum size of the Auto Scaling Group"
   type        = number
 }
 

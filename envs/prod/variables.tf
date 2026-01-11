@@ -75,3 +75,15 @@ variable "asg_desired_capacity" {
   description = "Desired capacity of the Auto Scaling Group"
   type        = number
 }
+
+variable "domain_name" {
+  description = "The domain name for the ACM certificate"
+  type        = string
+
+}
+
+variable "hosted_zone_name" {
+  type        = string
+  description = "Route53 hosted zone name (e.g. example.com)"
+
+}
