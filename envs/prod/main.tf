@@ -23,13 +23,11 @@ module "alb" {
   vpc_id            = module.vpc.vpc_id
   public_subnet_ids = module.vpc.public_subnet_ids
   alb_sg_id         = module.security.alb_sg_id
-  domain_name       = var.domain_name
-  hosted_zone_name  = var.hosted_zone_name
 }
 
 module "compute" {
   source = "../../modules/compute"
-
+  # ami
   env                  = var.env
   ami_id               = var.ami_id
   instance_type        = var.instance_type
@@ -52,4 +50,14 @@ module "rds" {
 
   db_subnet_ids = module.vpc.private_db_subnet_ids
   db_sg_ids     = module.security.db_sg_ids
+}
+
+module "monitoring" {
+  source = "../../modules/monitoring"
+
+  env                     = var.env
+  email                   = var.email
+  asg_name                = module.compute.asg_name
+  alb_arn_suffix          = module.alb.alb_arn_suffix
+  target_group_arn_suffix = module.alb.target_group_arn_suffix
 }

@@ -3,9 +3,9 @@ resource "aws_sns_topic" "alerts" {
 }
 
 resource "aws_sns_topic_subscription" "email" {
-    topic_arn = aws_sns_topic.alerts.arn
-    protocol  = "email"
-    endpoint  = var.email
+  topic_arn = aws_sns_topic.alerts.arn
+  protocol  = "email"
+  endpoint  = var.email
 }
 
 resource "aws_cloudwatch_metric_alarm" "asg_high_cpu" {

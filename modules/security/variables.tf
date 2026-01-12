@@ -1,9 +1,9 @@
 variable "env" {
-    description = "Environment name"
-    type = string
+  description = "Environment name"
+  type        = string
 }
 
 variable "vpc_id" {
-    description = "VPC ID"
-    type = string
+  description = "VPC ID"
+  type        = string
 }
