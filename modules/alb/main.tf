@@ -12,7 +12,7 @@ resource "aws_lb" "main" {
     Name        = "alb-${var.env}"
   }
 }
-
+#test comment
 resource "aws_lb_target_group" "main" {
   name     = "tg-${var.env}"
   port     = 80
